@@ -3,7 +3,7 @@ import crypto from 'crypto';
 export default function handler(req, res) {
   const VERIFICATION_TOKEN = 'cardoebaydelete20258092842830242';
   
-  const ENDPOINT_URL = 'https://ebay-compliance-8hcb5td3o-albert-lillys-projects.vercel.app/api/marketplace-deletion';
+  const ENDPOINT_URL = 'https://ebay-compliance-albert-lillys-projects.vercel.app/api/marketplace-deletion';
   
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
