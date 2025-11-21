@@ -1,38 +1,28 @@
-import crypto from 'crypto';
+import { createHash } from 'crypto';
 
 export default function handler(req, res) {
-  const VERIFICATION_TOKEN = 'cardoebaydelete20258092842830242';
-  
-  const ENDPOINT_URL = 'https://ebay-compliance-albert-lillys-projects.vercel.app/api/marketplace-deletion';
+  const verificationToken = 'cardoebaydelete20258092842830242';
+  const endpoint = 'https://ebay-compliance-albert-lillys-projects.vercel.app/api/marketplace-deletion';
   
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
   
   if (req.method === 'GET' && req.query.challenge_code) {
     const challengeCode = req.query.challenge_code;
     
-    const hash = crypto
-      .createHash('sha256')
-      .update(challengeCode + VERIFICATION_TOKEN + ENDPOINT_URL)
-      .digest('hex');
+    const hash = createHash('sha256');
+    hash.update(challengeCode);
+    hash.update(verificationToken);
+    hash.update(endpoint);
+    const responseHash = hash.digest('hex');
     
     return res.status(200).json({
-      challengeResponse: hash
+      challengeResponse: responseHash
     });
   }
   
   if (req.method === 'POST') {
-    console.log('Deletion notification received:', req.body);
     return res.status(200).end();
   }
   
-  return res.status(200).json({ 
-    status: 'Endpoint is active'
-  });
+  return res.status(200).json({ status: 'active' });
 }
